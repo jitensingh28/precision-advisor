@@ -1,3 +1,22 @@
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    req = request.get_json(force=True)
+    # Try to get the ID from parameters first
+    user_id = req.get('queryResult', {}).get('parameters', {}).get('number')
+    # If not found, try to get it from outputContexts
+    if not user_id:
+        contexts = req.get('queryResult', {}).get('outputContexts', [])
+        for ctx in contexts:
+            params = ctx.get('parameters', {})
+            if 'number' in params:
+                user_id = params['number']
+                break
+    # Now use user_id for your logic
+    if user_id:
+        # ... fetch and return personalized response ...
+        return jsonify({'fulfillmentText': f'Hello! Your ID is {user_id}.'})
+    else:
+        return jsonify({'fulfillmentText': 'Please provide your ID.'})
 from flask import Flask, request, jsonify
 import pandas as pd
 
