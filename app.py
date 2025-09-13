@@ -11,9 +11,14 @@ def suggest():
         # For demo, use farmer_id=1 or extract from data if provided
         # farmer_id = data.get('farmer_id', 1)
         farmer_id = data.get('farmer_id') or data.get('number')
+        if not farmer_id:
+            return jsonify({"fulfillmentText": "Please provide your farmer ID."})
         farmer_id = int(farmer_id)
         df = pd.read_csv('sample_data.csv')
-        row = df[df['farmer_id'] == farmer_id].iloc[0]
+        filtered = df[df['farmer_id'] == farmer_id]
+        if filtered.empty:
+            return jsonify({"fulfillmentText": f"No data found for farmer ID {farmer_id}."})
+        row = filtered.iloc[0]
         # Get user question if available
         user_query = data.get('query', '').lower()
         # Template selection based on keywords in user_query
