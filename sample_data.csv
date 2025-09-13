@@ -1,3 +1,11 @@
-farmer_id,equipment,feature,upgrade,usage_hours,upgrade_cost,potential_savings
-1,Tractor A,None,See & Spray,500,2000,15
-2,Tractor B,AutoTrac,See & Spray,300,2000,10
+farmer_id,farmer_name,equipment,feature,upgrade,usage_hours,upgrade_cost,potential_savings,roi_seasons,subscription_available
+1,John Smith,Tractor 8R,None,See & Spray,1200,2500,18,1,Yes
+2,Emily Davis,Combine S780,AutoTrac,JDLink,800,1200,10,2,Yes
+3,Raj Patel,Planter 1775NT,Section Control,ExactEmerge,600,3500,22,1,No
+4,Maria Lopez,Tractor 6M,None,AutoTrac,1500,1800,12,2,Yes
+5,Chen Wei,Self-Propelled Sprayer,None,See & Spray,2000,3000,20,1,Yes
+6,Anna Müller,Combine S770,JDLink,HarvestLab,900,2200,15,2,No
+7,Lucas Rossi,Planter 1725C,None,ExactEmerge,400,3200,25,1,No
+8,Ahmed Hassan,Tractor 7R,AutoTrac,JDLink,1100,1000,8,2,Yes
+9,Olga Ivanova,Tractor 8R,JDLink,See & Spray,1700,2000,14,1,Yes
+10,David Brown,Planter 1775NT,None,Section Control,500,1500,12,2,No
