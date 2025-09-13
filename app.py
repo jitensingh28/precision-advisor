@@ -10,7 +10,8 @@ def suggest():
         data = request.get_json(force=True)
         # For demo, use farmer_id=1 or extract from data if provided
         # farmer_id = data.get('farmer_id', 1)
-        farmer_id = data.get('farmer_id') or data.get('number')
+        params = data.get('queryResult', {}).get('parameters', {})
+        farmer_id = params.get('farmer_id') or params.get('number')
         if not farmer_id:
             return jsonify({"fulfillmentText": "Please provide your farmer ID."})
         farmer_id = int(farmer_id)
