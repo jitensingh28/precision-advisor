@@ -9,7 +9,8 @@ def suggest():
     try:
         data = request.get_json(force=True)
         # For demo, use farmer_id=1 or extract from data if provided
-        farmer_id = data.get('farmer_id', 1)
+        # farmer_id = data.get('farmer_id', 1)
+        farmer_id = data.get('farmer_id') or data.get('number')
         df = pd.read_csv('sample_data.csv')
         row = df[df['farmer_id'] == farmer_id].iloc[0]
         # Get user question if available
