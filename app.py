@@ -76,7 +76,9 @@ def suggest():
                 response_text += " Subscription options are available."
         return jsonify({"fulfillmentText": response_text})
     except Exception as e:
-        return jsonify({"fulfillmentText": "Sorry, I couldn't process your request."})
+        import traceback
+        error_message = str(e) + "\n" + traceback.format_exc()
+        return jsonify({"fulfillmentText": f"Error: {error_message}"})
 
 if __name__ == '__main__':
     app.run(port=5000)
