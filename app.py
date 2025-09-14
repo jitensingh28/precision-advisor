@@ -11,6 +11,7 @@ def suggest():
         intent = data.get('queryResult', {}).get('intent', {}).get('displayName', '')
         params = data.get('queryResult', {}).get('parameters', {})
 
+
         # Intent-based routing
         if intent == 'CaptureID':
             farmer_id = params.get('farmer_id') or params.get('number')
@@ -28,6 +29,32 @@ def suggest():
             farmer_name = row.get('farmer_name', 'farmer')
             greeting = f"Hello {farmer_name}! How can I help you with your {row['equipment']} today?"
             return jsonify({"fulfillmentText": greeting})
+
+        if intent == 'MoreDetails':
+            farmer_id = params.get('farmer_id') or params.get('number')
+            if not farmer_id:
+                # Try to get from context
+                contexts = data.get('queryResult', {}).get('outputContexts', [])
+                for ctx in contexts:
+                    ctx_params = ctx.get('parameters', {})
+                    farmer_id = ctx_params.get('farmer_id') or ctx_params.get('number')
+                    if farmer_id:
+                        break
+            if not farmer_id:
+                return jsonify({"fulfillmentText": "I need your farmer ID to provide more details."})
+            try:
+                farmer_id = int(farmer_id)
+            except ValueError:
+                return jsonify({"fulfillmentText": "That doesn't seem to be a valid ID. Please try again."})
+            try:
+                details_df = pd.read_csv('upgrade_details.csv')
+                details_row = details_df[details_df['farmer_id'] == farmer_id]
+                if details_row.empty:
+                    return jsonify({"fulfillmentText": "Sorry, I don't have more details for this upgrade yet."})
+                details_text = details_row.iloc[0]['upgrade_details']
+                return jsonify({"fulfillmentText": details_text})
+            except Exception as e:
+                return jsonify({"fulfillmentText": "Sorry, there was a problem fetching the details."})
 
         # Default: treat as upgrade suggestion (SuggestUpgrade or fallback)
         farmer_id = params.get('farmer_id') or params.get('number')
@@ -93,6 +120,8 @@ def suggest():
             )
             if str(row['subscription_available']).lower() == 'yes':
                 response_text += " Subscription options are available."
+        # Append follow-up prompt
+        response_text += " Would you like to know more details or book a demo?"
         return jsonify({"fulfillmentText": response_text})
     except Exception as e:
         import traceback
