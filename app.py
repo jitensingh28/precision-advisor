@@ -52,6 +52,7 @@ def suggest():
                 if details_row.empty:
                     return jsonify({"fulfillmentText": "Sorry, I don't have more details for this upgrade yet."})
                 details_text = details_row.iloc[0]['upgrade_details']
+                details_text += " Would you like to book a demo?"
                 return jsonify({"fulfillmentText": details_text})
             except Exception as e:
                 return jsonify({"fulfillmentText": "Sorry, there was a problem fetching the details."})
